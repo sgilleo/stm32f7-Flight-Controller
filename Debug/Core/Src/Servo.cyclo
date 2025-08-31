@@ -1,0 +1,3 @@
+../Core/Src/Servo.c:10:6:Servo_Begin	1
+../Core/Src/Servo.c:23:6:Servo_Move	8
+../Core/Src/Servo.c:31:6:Servo_Update	1

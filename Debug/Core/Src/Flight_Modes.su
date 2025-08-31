@@ -1,0 +1,3 @@
+../Core/Src/Flight_Modes.c:12:6:Stabilized_Mode	16	static
+../Core/Src/Flight_Modes.c:21:6:Acro_Mode	16	static
+../Core/Src/Flight_Modes.c:29:6:Manual_Mode	8	static

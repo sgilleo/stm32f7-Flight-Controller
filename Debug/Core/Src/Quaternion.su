@@ -1,0 +1,9 @@
+../Core/Src/Quaternion.c:12:12:Quaternion_mult	88	static
+../Core/Src/Quaternion.c:21:7:Quaternion_dot	40	static
+../Core/Src/Quaternion.c:25:12:Quaternion_scalar	80	static
+../Core/Src/Quaternion.c:34:12:Quaternion_add	88	static
+../Core/Src/Quaternion.c:43:12:Quaternion_normalize	88	static
+../Core/Src/Quaternion.c:53:6:Quaternion_to_Euler	64	static
+../Core/Src/Quaternion.c:76:12:Euler_to_Quaternion	120	static
+../Core/Src/Quaternion.c:85:12:Quaternion_Slerp	128	static
+../Core/Src/Quaternion.c:106:12:Quaternion_Lerp	96	static

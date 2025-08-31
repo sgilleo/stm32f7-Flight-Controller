@@ -1,0 +1,3 @@
+../Core/Src/Sbus.c:11:19:Sbus_Begin	24	static
+../Core/Src/Sbus.c:24:5:sbus_raw_to_us	24	static
+../Core/Src/Sbus.c:31:6:Sbus_decode	56	static

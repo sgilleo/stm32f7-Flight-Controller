@@ -1,0 +1,4 @@
+../Core/Src/AHRS.c:14:6:AHRS_Init	48	static
+../Core/Src/AHRS.c:25:6:AHRS_Update_Gyro	32	static
+../Core/Src/AHRS.c:49:6:AHRS_Update_Acc	32	static
+../Core/Src/AHRS.c:57:6:AHRS_Update_Complementary_Filter	16	static
