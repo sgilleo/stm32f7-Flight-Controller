@@ -14,9 +14,6 @@ typedef struct{
 	uint8_t buffer[25];
 	float channels[18];
 	uint8_t dataRdy;
-	uint8_t inSync;
-	uint8_t counter;
-	uint8_t firstByte;
 } Sbus;
 
 HAL_StatusTypeDef Sbus_Begin(UART_HandleTypeDef *huart, Sbus *receiver);

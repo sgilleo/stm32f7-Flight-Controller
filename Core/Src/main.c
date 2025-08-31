@@ -71,6 +71,7 @@ TIM_HandleTypeDef htim3;
 UART_HandleTypeDef huart4;
 UART_HandleTypeDef huart5;
 UART_HandleTypeDef huart6;
+DMA_HandleTypeDef hdma_uart4_rx;
 
 /* USER CODE BEGIN PV */
 
@@ -113,53 +114,16 @@ Flight_Mode flight_mode;
 
 
 void HAL_UARTEx_RxEventCallback(UART_HandleTypeDef *huart, uint16_t Size){
-	HAL_StatusTypeDef status;
-	/*if(huart->Instance == huart4.Instance){
-		if(!receiver.inSync){
-			if(receiver.firstByte){
-				if(receiver.buffer[0] == 0x0F) receiver.firstByte = 0;
-			}
-			else{
-				if(receiver.counter == 24){
-					if(receiver.buffer[0] == 0x00){
-						receiver.inSync = 1;
-						status = HAL_UART_AbortReceive(&huart4);
-						if(status != HAL_OK){
-							Error_Handler();
-						}
-						status = HAL_UART_Receive_DMA(&huart4, receiver.buffer, 25);
-						if(status != HAL_OK){
-							Error_Handler();
-						}
-						return;
-					}
-					else{
-						receiver.counter = 0;
-						receiver.firstByte = 1;
-					}
-				}
-				else receiver.counter++;
-			}
-			status = HAL_UART_AbortReceive(&huart4);
-			if(status != HAL_OK){
-				Error_Handler();
-			}
-			status = HAL_UARTEx_ReceiveToIdle_DMA(&huart4, receiver.buffer, 1);
-			if(status != HAL_OK){
-				Error_Handler();
-			}
-		}*/
+	if(huart->Instance == huart4.Instance){
 
-	status = HAL_UARTEx_ReceiveToIdle_IT(&huart4, receiver.buffer, 25);
-	if(status != HAL_OK){
-		Error_Handler();
-	}
-
-	if(receiver.buffer[0] == 0x0F && receiver.buffer[24] == 0x00) {
-
-		Sbus_decode(receiver.buffer, receiver.channels);
-		receiver.dataRdy = 1;
-
+		if(receiver.buffer[0] == 0x0F && receiver.buffer[24] == 0x00) {
+			Sbus_decode(receiver.buffer, receiver.channels);
+			receiver.dataRdy = 1;
+		}
+		else{
+			HAL_UART_AbortReceive(&huart4);
+			HAL_UARTEx_ReceiveToIdle_DMA(&huart4, receiver.buffer, 25);
+		}
 	}
 }
 
@@ -237,13 +201,11 @@ int main(void)
 	  Error_Handler();
   }
 
-  status = ICM42688_Begin(&imu, &hspi1);
-  if(status != HAL_OK) {
+  if(ICM42688_Begin(&imu, &hspi1) != HAL_OK) {
 	  Error_Handler();
   }
 
-  HAL_ADC_Start_DMA(&hadc1, &battery, 1); //Start DMA Read for Vbat ADC
-  if(status != HAL_OK) {
+  if(HAL_ADC_Start_DMA(&hadc1, &battery, 1) != HAL_OK) { //Start DMA Read for Vbat ADC
 	  Error_Handler();
   }
 
@@ -766,8 +728,12 @@ static void MX_DMA_Init(void)
 
   /* DMA controller clock enable */
   __HAL_RCC_DMA2_CLK_ENABLE();
+  __HAL_RCC_DMA1_CLK_ENABLE();
 
   /* DMA interrupt init */
+  /* DMA1_Stream2_IRQn interrupt configuration */
+  HAL_NVIC_SetPriority(DMA1_Stream2_IRQn, 0, 0);
+  HAL_NVIC_EnableIRQ(DMA1_Stream2_IRQn);
   /* DMA2_Stream0_IRQn interrupt configuration */
   HAL_NVIC_SetPriority(DMA2_Stream0_IRQn, 0, 0);
   HAL_NVIC_EnableIRQ(DMA2_Stream0_IRQn);

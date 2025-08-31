@@ -9,14 +9,14 @@
 #include "Sbus.h"
 
 HAL_StatusTypeDef Sbus_Begin(UART_HandleTypeDef *huart, Sbus *receiver){
-	receiver->inSync = 1;
-	receiver->firstByte = 0;
-	receiver->counter = 0;
-	HAL_StatusTypeDef status = HAL_UARTEx_ReceiveToIdle_IT(huart, receiver->buffer, 25); //Init Sbus Reception
-	//HAL_StatusTypeDef status = HAL_UART_Receive_DMA(huart, receiver->buffer, 1);
-	//HAL_StatusTypeDef status = HAL_UARTEx_ReceiveToIdle_DMA(huart, receiver->buffer, 25);
-	if(status != HAL_OK) return status;
+	HAL_StatusTypeDef status;
 
+	HAL_UART_AbortReceive(huart); //Sbus is already sending before initialising, cancel reception to avoid HAL_ERROR
+
+	status = HAL_UARTEx_ReceiveToIdle_DMA(huart, receiver->buffer, 25);
+	if(status != HAL_OK) {
+		return status;
+	}
 
 	return status;
 }
