@@ -11,14 +11,14 @@
 #include <math.h>
 #include "Sbus.h"
 #include "ICM42688P.h"
+#include "Outputs.h"
+#include "PIDs.h"
 
 #define STABILIZED_MAX_ROLL M_PI_4
 #define STABILIZED_MAX_PITCH M_PI_4
-#define STABILIZED_YAW_RATE 0.01
 
-#define ACRO_ROLL_RATE 0.05
-#define ACRO_PITCH_RATE 0.05
-#define ACRO_YAW_RATE 0.05
+#define ACRO_ROLL_RATE 0.02
+#define ACRO_PITCH_RATE 0.02
 
 typedef enum{
 	MANUAL_MODE,
@@ -26,11 +26,18 @@ typedef enum{
 	ACRO_MODE
 }Flight_Mode;
 
-void Stabilized_Mode(Sbus channels);
+typedef enum{
+	DISARMED,
+	ARMED
+}Arming;
 
-void Acro_Mode(Sbus channels);
+void Stabilized_Mode(Sbus receiver, float dt);
 
-void Manual_Mode(Sbus channels, float *outputs);
+void Acro_Mode(Sbus receiver, float dt);
+
+void Manual_Mode(Sbus receiver);
+
+void Process_Input(Sbus receiver);
 
 
 #endif /* INC_FLIGHT_MODES_H_ */

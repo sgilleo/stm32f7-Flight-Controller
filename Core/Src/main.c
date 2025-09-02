@@ -26,12 +26,13 @@
 #include <math.h>
 #include "usbd_cdc_if.h"
 #include "ICM42688P.h"
-#include "Servo.h"
+#include "Outputs.h"
 #include "Sbus.h"
-#include "Quaternion.h"
+//#include "Quaternion.h"
 #include "Flight_Modes.h"
 #include "AHRS.h"
 #include "PIDs.h"
+#include "Battery.h"
 
 
 /* USER CODE END Includes */
@@ -46,7 +47,6 @@
 
 #define DELTA_T 0.01
 
-#define FLIGHT_MODE_CHANNEL 5-1
 
 /* USER CODE END PD */
 
@@ -97,27 +97,27 @@ static void MX_USART6_UART_Init(void);
 /* Private user code ---------------------------------------------------------*/
 /* USER CODE BEGIN 0 */
 
-char usbBuffer[150];
-HAL_StatusTypeDef status;
-
 Sbus receiver;
 ICM42688 imu;
 
-uint32_t battery;
-float vbat;
+extern Battery battery;
 
-extern Vec3 attitude_gyro, attitude_acc, attitude;
+extern Vec3 attitude;
 extern Vec3 ref;
-float outputs[8];
+extern float outputs[8];
+extern float functions[10];
 
-Flight_Mode flight_mode;
+extern Flight_Mode flight_mode;
+
+uint32_t timer = 0;
+extern Arming arming;
 
 
 void HAL_UARTEx_RxEventCallback(UART_HandleTypeDef *huart, uint16_t Size){
 	if(huart->Instance == huart4.Instance){
 
 		if(receiver.buffer[0] == 0x0F && receiver.buffer[24] == 0x00) {
-			Sbus_decode(receiver.buffer, receiver.channels);
+			Sbus_decode(&receiver);
 			receiver.dataRdy = 1;
 		}
 		else{
@@ -196,22 +196,28 @@ int main(void)
   MX_USB_DEVICE_Init();
   /* USER CODE BEGIN 2 */
 
-  status = Sbus_Begin(&huart4, &receiver); //Init Sbus Reception
-  if(status != HAL_OK) {
+
+  //Start Sbus Reception and Sync
+  if(Sbus_Begin(&huart4, &receiver) != HAL_OK) {
 	  Error_Handler();
   }
 
+  //Start IMU, configure ranges, filters & interrupts
   if(ICM42688_Begin(&imu, &hspi1) != HAL_OK) {
 	  Error_Handler();
   }
 
-  if(HAL_ADC_Start_DMA(&hadc1, &battery, 1) != HAL_OK) { //Start DMA Read for Vbat ADC
+  //Start DMA Read for Vbat ADC
+  if(Battery_Begin(&hadc1) != HAL_OK) {
 	  Error_Handler();
   }
 
-  AHRS_Init();
+  //Configure output timers
+  if(Output_Begin(&htim2, &htim3) != HAL_OK) {
+	  Error_Handler();
+  }
 
-  Servo_Begin(&htim2, &htim3);
+
 
 
   /* USER CODE END 2 */
@@ -221,53 +227,36 @@ int main(void)
   while (1)
   {
 
-	  vbat = 0.00886230468f * battery; // 3.3/4096*11
+	if ((HAL_GetTick() - timer) >= DELTA_T*1000) {
 
-	  if(imu.dataRdy){
+		Battery_Update();
 
+		if(imu.dataRdy){
 
-		  AHRS_Update_Gyro(imu.gyro, DELTA_T);
+			AHRS_Update_Complementary_Filter(imu.gyro, imu.accel, 0.95, DELTA_T);
 
-		  AHRS_Update_Acc(imu.accel);
+		}
 
-		  AHRS_Update_Complementary_Filter(0.95);
+		if(receiver.dataRdy){
 
+			Process_Input(receiver);
 
-	  }
+			if(flight_mode == ACRO_MODE) Acro_Mode(receiver, DELTA_T);
+			else if (flight_mode == STABILIZED_MODE) Stabilized_Mode(receiver, DELTA_T);
+			else if(flight_mode == MANUAL_MODE) Manual_Mode(receiver);
 
-	  if(receiver.dataRdy){
-		  if(receiver.channels[FLIGHT_MODE_CHANNEL] < 1200){
-			  flight_mode = MANUAL_MODE;
-		  }
-		  else if (receiver.channels[FLIGHT_MODE_CHANNEL] >= 1200 &&
-				  receiver.channels[FLIGHT_MODE_CHANNEL] < 1800){
-			  flight_mode = STABILIZED_MODE;
-		  }
-		  else{
-			  flight_mode = ACRO_MODE;
-		  }
+		}
 
-		  if(flight_mode == ACRO_MODE) Acro_Mode(receiver);
-		  else if (flight_mode == STABILIZED_MODE) Stabilized_Mode(receiver);
-		  else if(flight_mode == MANUAL_MODE) Manual_Mode(receiver, outputs);
+		Output_Update(&htim2, &htim3);
 
-	  }
-
-	  //if(imu.dataRdy && receiver.dataRdy){
-		  if(flight_mode == ACRO_MODE || flight_mode == STABILIZED_MODE){
-			  PID_Update(ref, attitude, DELTA_T);
-		  }
-		  Servo_Update(&htim2, &htim3, outputs);
-	  //}
+		//sprintf(usbBuffer, "w%fwa%fab%fbc%fc\r\n", q.w, q.x, q.y, q.z);
+		//sprintf(usbBuffer, "%f, %f\r\n", roll, pitch);
+		//CDC_Transmit_FS((uint8_t *) usbBuffer, strlen(usbBuffer));
 
 
+		timer += DELTA_T*1000;
 
-
-	  //sprintf(usbBuffer, "w%fwa%fab%fbc%fc\r\n", q.w, q.x, q.y, q.z);
-	  //sprintf(usbBuffer, "%f, %f\r\n", roll, pitch);
-	  //CDC_Transmit_FS((uint8_t *) usbBuffer, strlen(usbBuffer));
-
-	  HAL_Delay(DELTA_T*1000);
+	}
 
 
 
@@ -766,17 +755,17 @@ static void MX_GPIO_Init(void)
   __HAL_RCC_GPIOD_CLK_ENABLE();
 
   /*Configure GPIO pin Output Level */
-  HAL_GPIO_WritePin(GPIOC, GPIO_PIN_3, GPIO_PIN_RESET);
+  HAL_GPIO_WritePin(STATUS_LED_GPIO_Port, STATUS_LED_Pin, GPIO_PIN_RESET);
 
   /*Configure GPIO pin Output Level */
   HAL_GPIO_WritePin(SPI1_CS_GPIO_Port, SPI1_CS_Pin, GPIO_PIN_RESET);
 
-  /*Configure GPIO pin : PC3 */
-  GPIO_InitStruct.Pin = GPIO_PIN_3;
+  /*Configure GPIO pin : STATUS_LED_Pin */
+  GPIO_InitStruct.Pin = STATUS_LED_Pin;
   GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
   GPIO_InitStruct.Pull = GPIO_NOPULL;
   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
-  HAL_GPIO_Init(GPIOC, &GPIO_InitStruct);
+  HAL_GPIO_Init(STATUS_LED_GPIO_Port, &GPIO_InitStruct);
 
   /*Configure GPIO pin : SPI1_CS_Pin */
   GPIO_InitStruct.Pin = SPI1_CS_Pin;
@@ -844,6 +833,10 @@ void Error_Handler(void)
   __disable_irq();
   while (1)
   {
+	  HAL_GPIO_TogglePin(STATUS_LED_GPIO_Port, STATUS_LED_Pin); //LED BLINK
+	  for(int i = 0; i < 1000000; i++){
+		  __NOP();
+	  }
   }
   /* USER CODE END Error_Handler_Debug */
 }

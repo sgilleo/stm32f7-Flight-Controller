@@ -28,43 +28,53 @@ int sbus_raw_to_us(uint16_t v) {
 	return us;
 }
 
-void Sbus_decode(uint8_t *buffer, float *channels){
+void Sbus_decode(Sbus *receiver){
 
 	uint16_t raw_channels[18];
 
-	raw_channels[0]  = ((buffer[1]    |buffer[2]<<8)                 & 0x07FF);
-	raw_channels[1]  = ((buffer[2]>>3 |buffer[3]<<5)                 & 0x07FF);
-	raw_channels[2]  = ((buffer[3]>>6 |buffer[4]<<2 |buffer[5]<<10)  & 0x07FF);
-	raw_channels[3]  = ((buffer[5]>>1 |buffer[6]<<7)                 & 0x07FF);
-	raw_channels[4]  = ((buffer[6]>>4 |buffer[7]<<4)                 & 0x07FF);
-	raw_channels[5]  = ((buffer[7]>>7 |buffer[8]<<1 |buffer[9]<<9)   & 0x07FF);
-	raw_channels[6]  = ((buffer[9]>>2 |buffer[10]<<6)                & 0x07FF);
-	raw_channels[7]  = ((buffer[10]>>5|buffer[11]<<3)                & 0x07FF);
-	raw_channels[8]  = ((buffer[12]   |buffer[13]<<8)                & 0x07FF);
-	raw_channels[9]  = ((buffer[13]>>3|buffer[14]<<5)                & 0x07FF);
-	raw_channels[10] = ((buffer[14]>>6|buffer[15]<<2|buffer[16]<<10) & 0x07FF);
-	raw_channels[11] = ((buffer[16]>>1|buffer[17]<<7)                & 0x07FF);
-	raw_channels[12] = ((buffer[17]>>4|buffer[18]<<4)                & 0x07FF);
-	raw_channels[13] = ((buffer[18]>>7|buffer[19]<<1|buffer[20]<<9)  & 0x07FF);
-	raw_channels[14] = ((buffer[20]>>2|buffer[21]<<6)                & 0x07FF);
-	raw_channels[15] = ((buffer[21]>>5|buffer[22]<<3)                & 0x07FF);
+	raw_channels[0]  = ((receiver->buffer[1]    |receiver->buffer[2]<<8)                           & 0x07FF);
+	raw_channels[1]  = ((receiver->buffer[2]>>3 |receiver->buffer[3]<<5)                           & 0x07FF);
+	raw_channels[2]  = ((receiver->buffer[3]>>6 |receiver->buffer[4]<<2 |receiver->buffer[5]<<10)  & 0x07FF);
+	raw_channels[3]  = ((receiver->buffer[5]>>1 |receiver->buffer[6]<<7)                           & 0x07FF);
+	raw_channels[4]  = ((receiver->buffer[6]>>4 |receiver->buffer[7]<<4)                           & 0x07FF);
+	raw_channels[5]  = ((receiver->buffer[7]>>7 |receiver->buffer[8]<<1 |receiver->buffer[9]<<9)   & 0x07FF);
+	raw_channels[6]  = ((receiver->buffer[9]>>2 |receiver->buffer[10]<<6)                          & 0x07FF);
+	raw_channels[7]  = ((receiver->buffer[10]>>5|receiver->buffer[11]<<3)                          & 0x07FF);
+	raw_channels[8]  = ((receiver->buffer[12]   |receiver->buffer[13]<<8)                          & 0x07FF);
+	raw_channels[9]  = ((receiver->buffer[13]>>3|receiver->buffer[14]<<5)                          & 0x07FF);
+	raw_channels[10] = ((receiver->buffer[14]>>6|receiver->buffer[15]<<2|receiver->buffer[16]<<10) & 0x07FF);
+	raw_channels[11] = ((receiver->buffer[16]>>1|receiver->buffer[17]<<7)                          & 0x07FF);
+	raw_channels[12] = ((receiver->buffer[17]>>4|receiver->buffer[18]<<4)                          & 0x07FF);
+	raw_channels[13] = ((receiver->buffer[18]>>7|receiver->buffer[19]<<1|receiver->buffer[20]<<9)  & 0x07FF);
+	raw_channels[14] = ((receiver->buffer[20]>>2|receiver->buffer[21]<<6)                          & 0x07FF);
+	raw_channels[15] = ((receiver->buffer[21]>>5|receiver->buffer[22]<<3)                          & 0x07FF);
 
-    if (buffer[23] & (1 << 0)) {
+    if (receiver->buffer[23] & (1 << 0)) {
     	raw_channels[16] = 1;
     }
     else {
     	raw_channels[16] = 0;
     }
 
-    if (buffer[23] & (1 << 1)) {
+    if (receiver->buffer[23] & (1 << 1)) {
     	raw_channels[17] = 1;
     }
     else {
     	raw_channels[17] = 0;
     }
 
+    // Failsafe
+	receiver->failsafe_status = SBUS_SIGNAL_OK;
+	if (receiver->buffer[23] & (1 << 2)) {
+		receiver->failsafe_status = SBUS_SIGNAL_LOST;
+	}
+
+	if (receiver->buffer[23] & (1 << 3)) {
+		receiver->failsafe_status = SBUS_SIGNAL_FAILSAFE;
+	}
+
     for(int i = 0; i < 18; i++){
-    	channels[i] = sbus_raw_to_us(raw_channels[i]);
+    	receiver->channels[i] = sbus_raw_to_us(raw_channels[i]);
     }
 }
 

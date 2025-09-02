@@ -36,7 +36,9 @@ Core/Src/PIDs.o: ../Core/Src/PIDs.c ../Core/Inc/PIDs.h \
  ../Drivers/STM32F7xx_HAL_Driver/Inc/stm32f7xx_hal_uart_ex.h \
  ../Drivers/STM32F7xx_HAL_Driver/Inc/stm32f7xx_hal_pcd.h \
  ../Drivers/STM32F7xx_HAL_Driver/Inc/stm32f7xx_ll_usb.h \
- ../Drivers/STM32F7xx_HAL_Driver/Inc/stm32f7xx_hal_pcd_ex.h
+ ../Drivers/STM32F7xx_HAL_Driver/Inc/stm32f7xx_hal_pcd_ex.h \
+ ../Core/Inc/Outputs.h ../Core/Inc/Flight_Modes.h ../Core/Inc/Sbus.h \
+ ../Core/Inc/PIDs.h
 ../Core/Inc/PIDs.h:
 ../Core/Inc/ICM42688P.h:
 ../Drivers/STM32F7xx_HAL_Driver/Inc/stm32f7xx_hal.h:
@@ -76,3 +78,7 @@ Core/Src/PIDs.o: ../Core/Src/PIDs.c ../Core/Inc/PIDs.h \
 ../Drivers/STM32F7xx_HAL_Driver/Inc/stm32f7xx_hal_pcd.h:
 ../Drivers/STM32F7xx_HAL_Driver/Inc/stm32f7xx_ll_usb.h:
 ../Drivers/STM32F7xx_HAL_Driver/Inc/stm32f7xx_hal_pcd_ex.h:
+../Core/Inc/Outputs.h:
+../Core/Inc/Flight_Modes.h:
+../Core/Inc/Sbus.h:
+../Core/Inc/PIDs.h:

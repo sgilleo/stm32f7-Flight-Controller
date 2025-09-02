@@ -59,6 +59,8 @@ void Error_Handler(void);
 /* USER CODE END EFP */
 
 /* Private defines -----------------------------------------------------------*/
+#define STATUS_LED_Pin GPIO_PIN_3
+#define STATUS_LED_GPIO_Port GPIOC
 #define SPI1_CS_Pin GPIO_PIN_4
 #define SPI1_CS_GPIO_Port GPIOA
 #define IMU_INT_Pin GPIO_PIN_4

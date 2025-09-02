@@ -1,5 +1,5 @@
 Core/Src/AHRS.o: ../Core/Src/AHRS.c ../Core/Inc/AHRS.h \
- ../Core/Inc/Quaternion.h ../Core/Inc/ICM42688P.h \
+ ../Core/Inc/ICM42688P.h \
  ../Drivers/STM32F7xx_HAL_Driver/Inc/stm32f7xx_hal.h \
  ../Core/Inc/stm32f7xx_hal_conf.h \
  ../Drivers/STM32F7xx_HAL_Driver/Inc/stm32f7xx_hal_rcc.h \
@@ -38,7 +38,6 @@ Core/Src/AHRS.o: ../Core/Src/AHRS.c ../Core/Inc/AHRS.h \
  ../Drivers/STM32F7xx_HAL_Driver/Inc/stm32f7xx_ll_usb.h \
  ../Drivers/STM32F7xx_HAL_Driver/Inc/stm32f7xx_hal_pcd_ex.h
 ../Core/Inc/AHRS.h:
-../Core/Inc/Quaternion.h:
 ../Core/Inc/ICM42688P.h:
 ../Drivers/STM32F7xx_HAL_Driver/Inc/stm32f7xx_hal.h:
 ../Core/Inc/stm32f7xx_hal_conf.h:

@@ -1,0 +1,3 @@
+../Core/Src/Outputs.c:14:19:Output_Begin	9
+../Core/Src/Outputs.c:38:6:Servo_Move	6
+../Core/Src/Outputs.c:44:6:Output_Update	2
