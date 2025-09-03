@@ -1,3 +1,3 @@
 ../Core/Src/AHRS.c:13:6:AHRS_Update_Gyro	7
 ../Core/Src/AHRS.c:31:6:AHRS_Update_Acc	1
-../Core/Src/AHRS.c:39:6:AHRS_Update_Complementary_Filter	1
+../Core/Src/AHRS.c:40:6:AHRS_Update_Complementary_Filter	1

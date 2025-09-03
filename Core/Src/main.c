@@ -45,7 +45,7 @@
 /* Private define ------------------------------------------------------------*/
 /* USER CODE BEGIN PD */
 
-#define DELTA_T 0.01
+#define DELTA_T 0.001
 
 
 /* USER CODE END PD */
@@ -104,7 +104,7 @@ extern Battery battery;
 
 char usbBuffer[50];
 
-extern Vec3 attitude, attitude_gyro, attitude_acc;
+extern Vec3 attitude;
 extern Vec3 ref;
 extern uint16_t outputs[8];
 extern float functions[10];
@@ -236,7 +236,10 @@ int main(void)
 
 		if(imu.dataRdy){
 
-			AHRS_Update_Complementary_Filter(imu.gyro, imu.accel, 0.95, DELTA_T);
+			AHRS_Update_Complementary_Filter(imu.gyro, imu.accel, 0.8, DELTA_T);
+
+			sprintf(usbBuffer, "%f, %f\r\n", attitude.x, attitude.y);
+			CDC_Transmit_FS((uint8_t *) usbBuffer, strlen(usbBuffer));
 
 		}
 
@@ -258,9 +261,7 @@ int main(void)
 
 	}
 
-	sprintf(usbBuffer, "%f, %f\r\n", attitude.x, attitude.y);
-	//sprintf(usbBuffer, "%f, %f\r\n", roll, pitch);
-	CDC_Transmit_FS((uint8_t *) usbBuffer, strlen(usbBuffer));
+
 
 
     /* USER CODE END WHILE */

@@ -1,1 +1,2 @@
-../Core/Src/PIDs.c:15:6:PID_Update	80	static
+../Core/Src/PIDs.c:15:6:PID_Stabilized_Update	80	static
+../Core/Src/PIDs.c:33:6:PID_Acro_Update	80	static

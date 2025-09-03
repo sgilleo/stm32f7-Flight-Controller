@@ -264,9 +264,9 @@ void ICM42688_Process_Buffer(ICM42688 *device){
 	device->gyro.y -= 0.0449692011;
 	device->gyro.z -= 0.46484378;
 
-	//device->gyro.x *= DEG_TO_RAD;
-	//device->gyro.y *= DEG_TO_RAD;
-	//device->gyro.z *= DEG_TO_RAD;
+	device->gyro.x *= DEG_TO_RAD;
+	device->gyro.y *= DEG_TO_RAD;
+	device->gyro.z *= DEG_TO_RAD;
 
 }
 

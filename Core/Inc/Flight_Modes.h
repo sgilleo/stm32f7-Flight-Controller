@@ -19,6 +19,7 @@
 
 #define ACRO_ROLL_RATE 180 //Full Stick Left/Right: Degrees / Second
 #define ACRO_PITCH_RATE 180
+#define ACRO_YAW_RATE 180
 
 typedef enum{
 	MANUAL_MODE,

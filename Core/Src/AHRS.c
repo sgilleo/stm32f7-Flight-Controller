@@ -16,9 +16,9 @@ void AHRS_Update_Gyro(Vec3 gyro, float dt){
 	euler_rates_gyro.y = gyro.y*cosf(attitude.x) - gyro.z*sinf(attitude.x);
 	euler_rates_gyro.z = gyro.y*sinf(attitude.x)/cosf(attitude.y) + gyro.z*cosf(attitude.x)/cosf(attitude.y);
 
-	attitude_gyro.x = attitude.x + euler_rates_gyro.x * dt * DEG_TO_RAD;
-	attitude_gyro.y = attitude.y + euler_rates_gyro.y * dt * DEG_TO_RAD;
-	attitude_gyro.z = attitude.z + euler_rates_gyro.z * dt * DEG_TO_RAD;
+	attitude_gyro.x = attitude.x + euler_rates_gyro.x * dt;
+	attitude_gyro.y = attitude.y + euler_rates_gyro.y * dt;
+	attitude_gyro.z = attitude.z + euler_rates_gyro.z * dt;
 
 	if(attitude_gyro.x > M_PI || attitude_gyro.x <= -M_PI) attitude_gyro.x = -attitude_gyro.x;
 	if(attitude_gyro.y > M_PI || attitude_gyro.y <= -M_PI) attitude_gyro.y = -attitude_gyro.y;
@@ -36,10 +36,14 @@ void AHRS_Update_Acc(Vec3 accel){
 
 }
 
-void AHRS_Update_Complementary_Filter(Vec3 gyro, Vec3 acc, float gain, float dt){
+//fc: Cutoff frequency for complementary filter (Hz)
+void AHRS_Update_Complementary_Filter(Vec3 gyro, Vec3 acc, float fc, float dt){
 
 	AHRS_Update_Gyro(gyro, dt);
 	AHRS_Update_Acc(acc);
+
+	float tau = 1/(2*M_PI*fc);
+	float gain = tau/(tau+dt); //Gain depends on dt
 
 	attitude.x = gain*attitude_gyro.x + (1-gain)*attitude_acc.x;
 	attitude.y = gain*attitude_gyro.y + (1-gain)*attitude_acc.y;
