@@ -45,7 +45,7 @@
 /* Private define ------------------------------------------------------------*/
 /* USER CODE BEGIN PD */
 
-#define DELTA_T 0.001
+#define DELTA_T 0.01
 
 
 /* USER CODE END PD */
