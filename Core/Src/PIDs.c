@@ -27,11 +27,5 @@ void PID_Update(Vec3 ref, Vec3 attitude, float dt){
 	functions[AILERONS] /= M_PI_2;
 	functions[ELEVATOR] /= M_PI_2;
 
-	//Clamp to [-1,1] range
-	for(int i = 0; i < 10; i++) {
-		if(functions[i]<-1.0f) functions[i] = -1.0f;
-		if(functions[i]>1.0f) functions[i] = 1.0f;
-	}
-
 	error_prev = (Vec3) {.x = error.x, .y = error.y, .z = error.z};
 }

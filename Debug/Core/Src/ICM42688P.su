@@ -9,9 +9,10 @@
 ../Core/Src/ICM42688P.c:200:19:ICM42688_Read_Gyro	32	static
 ../Core/Src/ICM42688P.c:225:19:ICM42688_Read_Temp	24	static
 ../Core/Src/ICM42688P.c:239:6:ICM42688_Process_Buffer	32	static
-../Core/Src/ICM42688P.c:274:19:ICM42688_Change_Bank	24	static
-../Core/Src/ICM42688P.c:286:19:ICM42688_Write	32	static
-../Core/Src/ICM42688P.c:300:19:ICM42688_Write_Multiple	32	static
-../Core/Src/ICM42688P.c:318:19:ICM42688_Read	32	static
-../Core/Src/ICM42688P.c:336:19:ICM42688_Read_Multiple	32	static
-../Core/Src/ICM42688P.c:355:19:ICM42688_Read_DMA	32	static
+../Core/Src/ICM42688P.c:273:19:ICM42688_Calibrate_Gyro	56	static,ignoring_inline_asm
+../Core/Src/ICM42688P.c:303:19:ICM42688_Change_Bank	24	static
+../Core/Src/ICM42688P.c:315:19:ICM42688_Write	32	static
+../Core/Src/ICM42688P.c:329:19:ICM42688_Write_Multiple	32	static
+../Core/Src/ICM42688P.c:347:19:ICM42688_Read	32	static
+../Core/Src/ICM42688P.c:365:19:ICM42688_Read_Multiple	32	static
+../Core/Src/ICM42688P.c:384:19:ICM42688_Read_DMA	32	static

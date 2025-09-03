@@ -9,16 +9,18 @@
 
 Vec3 ref = {0.0f, 0.0f, 0.0f};
 Flight_Mode flight_mode = MANUAL_MODE;
+Flight_Mode prev_flight_mode = MANUAL_MODE; //For detecting edges in flight modes
 Arming arming = DISARMED;
 uint8_t arming_edge_detect = 0;
 
-extern Vec3 attitude;
+
+extern Vec3 attitude, integral;
 extern float functions[10];
 
 
 void Stabilized_Mode(Sbus receiver, float dt){
-	ref.x = (receiver.channels[ROLL_CHANNEL]-1500) * 0.002f * STABILIZED_MAX_ROLL;
-	ref.y = (receiver.channels[PITCH_CHANNEL]-1500) * 0.002f * STABILIZED_MAX_PITCH;
+	ref.x = (receiver.channels[ROLL_CHANNEL]-1500) * 0.002f * STABILIZED_MAX_ROLL * DEG_TO_RAD;
+	ref.y = (receiver.channels[PITCH_CHANNEL]-1500) * 0.002f * STABILIZED_MAX_PITCH * DEG_TO_RAD;
 
 	PID_Update(ref, attitude, dt);
 
@@ -28,8 +30,8 @@ void Stabilized_Mode(Sbus receiver, float dt){
 }
 
 void Acro_Mode(Sbus receiver, float dt){
-	ref.x += (receiver.channels[ROLL_CHANNEL]-1500) * 0.0031415 * ACRO_ROLL_RATE;
-	ref.y += (receiver.channels[PITCH_CHANNEL]-1500) * 0.0031415 * ACRO_PITCH_RATE;
+	ref.x += (receiver.channels[ROLL_CHANNEL]-1500) * 0.002f * ACRO_ROLL_RATE * DEG_TO_RAD * dt;
+	ref.y += (receiver.channels[PITCH_CHANNEL]-1500) * 0.002f * ACRO_PITCH_RATE * DEG_TO_RAD * dt;
 
 	if(ref.x > M_PI || ref.x <= -M_PI) ref.x = -ref.x;
 	if(ref.y > M_PI || ref.y <= -M_PI) ref.y = -ref.y;
@@ -63,6 +65,16 @@ void Process_Input(Sbus receiver){
 		flight_mode = ACRO_MODE;
 	}
 
+	//DISARM ON FAILSAFE
+	if(receiver.failsafe_status == SBUS_SIGNAL_FAILSAFE){
+		flight_mode = STABILIZED_MODE;
+		arming = DISARMED;
+		functions[THROTTLE] = -1.0f;
+	}
+
+	if(prev_flight_mode != flight_mode) { //Change in flight mode
+		integral = (Vec3){0.0f, 0.0f, 0.0f}; //Reset integral part of PID
+	}
 
 
 	//Set Arming
@@ -75,6 +87,7 @@ void Process_Input(Sbus receiver){
 
 
 	arming_edge_detect = (receiver.channels[ARMING_CHANNEL] <= 1500)? 1:0;
+	prev_flight_mode = flight_mode;
 }
 
 

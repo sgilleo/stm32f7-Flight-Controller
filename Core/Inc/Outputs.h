@@ -27,7 +27,7 @@ typedef enum{
 #define OUT5_FUNCTION NONE
 #define OUT6_FUNCTION NONE
 #define OUT7_FUNCTION NONE
-#define OUT8_FUNCTION NONE
+#define OUT8_FUNCTION THROTTLE
 
 #define OUT1_REVERSE 0 //0: Normal, 1: Reverse
 #define OUT2_REVERSE 0

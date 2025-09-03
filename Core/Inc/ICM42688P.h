@@ -189,6 +189,8 @@ HAL_StatusTypeDef ICM42688_Read_Temp(ICM42688 *device);
 
 void ICM42688_Process_Buffer(ICM42688 *device);
 
+HAL_StatusTypeDef ICM42688_Calibrate_Gyro(ICM42688 *device);
+
 HAL_StatusTypeDef ICM42688_Change_Bank(ICM42688 *device, BANK_SEL reg);
 
 

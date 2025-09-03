@@ -7,7 +7,7 @@
 
 #include "Outputs.h"
 
-float outputs[8];
+uint16_t outputs[8];
 float functions[10] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
 extern Arming arming;
 
@@ -44,6 +44,12 @@ void Servo_Move(TIM_HandleTypeDef *timerHandle, int channel, float pulse_width_u
 void Output_Update(TIM_HandleTypeDef *htim2, TIM_HandleTypeDef *htim3){
 
 	if(arming == DISARMED) functions[THROTTLE] = -1.0f;
+
+	//Clamp to [-1,1] range
+	for(int i = 0; i < 10; i++) {
+		if(functions[i]<-1.0f) functions[i] = -1.0f;
+		if(functions[i]>1.0f) functions[i] = 1.0f;
+	}
 
 	outputs[0] = functions[OUT1_FUNCTION] * (OUT1_MAX - OUT1_MIN)*(-OUT1_REVERSE+0.5) + OUT1_TRIM;
 	outputs[1] = functions[OUT2_FUNCTION] * (OUT2_MAX - OUT2_MIN)*(-OUT2_REVERSE+0.5) + OUT2_TRIM;

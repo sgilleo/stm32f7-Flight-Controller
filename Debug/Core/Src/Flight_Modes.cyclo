@@ -1,4 +1,4 @@
-../Core/Src/Flight_Modes.c:19:6:Stabilized_Mode	1
-../Core/Src/Flight_Modes.c:30:6:Acro_Mode	5
-../Core/Src/Flight_Modes.c:44:6:Manual_Mode	1
-../Core/Src/Flight_Modes.c:52:6:Process_Input	10
+../Core/Src/Flight_Modes.c:21:6:Stabilized_Mode	1
+../Core/Src/Flight_Modes.c:32:6:Acro_Mode	5
+../Core/Src/Flight_Modes.c:46:6:Manual_Mode	1
+../Core/Src/Flight_Modes.c:54:6:Process_Input	12

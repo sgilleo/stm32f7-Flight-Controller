@@ -14,11 +14,11 @@
 #include "Outputs.h"
 #include "PIDs.h"
 
-#define STABILIZED_MAX_ROLL M_PI_4
-#define STABILIZED_MAX_PITCH M_PI_4
+#define STABILIZED_MAX_ROLL 45 //Degrees
+#define STABILIZED_MAX_PITCH 45
 
-#define ACRO_ROLL_RATE 0.02
-#define ACRO_PITCH_RATE 0.02
+#define ACRO_ROLL_RATE 180 //Full Stick Left/Right: Degrees / Second
+#define ACRO_PITCH_RATE 180
 
 typedef enum{
 	MANUAL_MODE,

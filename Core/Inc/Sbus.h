@@ -25,7 +25,7 @@ typedef enum{
 
 typedef struct{
 	uint8_t buffer[25];
-	float channels[18];
+	uint16_t channels[18];
 	Failsafe failsafe_status;
 	uint8_t dataRdy;
 } Sbus;

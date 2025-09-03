@@ -102,9 +102,11 @@ ICM42688 imu;
 
 extern Battery battery;
 
-extern Vec3 attitude;
+char usbBuffer[50];
+
+extern Vec3 attitude, attitude_gyro, attitude_acc;
 extern Vec3 ref;
-extern float outputs[8];
+extern uint16_t outputs[8];
 extern float functions[10];
 
 extern Flight_Mode flight_mode;
@@ -121,6 +123,7 @@ void HAL_UARTEx_RxEventCallback(UART_HandleTypeDef *huart, uint16_t Size){
 			receiver.dataRdy = 1;
 		}
 		else{
+			receiver.dataRdy = 0;
 			HAL_UART_AbortReceive(&huart4);
 			HAL_UARTEx_ReceiveToIdle_DMA(&huart4, receiver.buffer, 25);
 		}
@@ -249,17 +252,15 @@ int main(void)
 
 		Output_Update(&htim2, &htim3);
 
-		//sprintf(usbBuffer, "w%fwa%fab%fbc%fc\r\n", q.w, q.x, q.y, q.z);
-		//sprintf(usbBuffer, "%f, %f\r\n", roll, pitch);
-		//CDC_Transmit_FS((uint8_t *) usbBuffer, strlen(usbBuffer));
 
 
 		timer += DELTA_T*1000;
 
 	}
 
-
-
+	sprintf(usbBuffer, "%f, %f\r\n", attitude.x, attitude.y);
+	//sprintf(usbBuffer, "%f, %f\r\n", roll, pitch);
+	CDC_Transmit_FS((uint8_t *) usbBuffer, strlen(usbBuffer));
 
 
     /* USER CODE END WHILE */

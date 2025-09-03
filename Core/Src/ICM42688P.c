@@ -260,9 +260,9 @@ void ICM42688_Process_Buffer(ICM42688 *device){
 	device->gyro.y = -(float) gyro[0] / 32.8f; //Axis remapping
 	device->gyro.z = (float) gyro[2] / 32.8f;
 
-	device->gyro.x -= -0.0396341197; //Calibration
-	device->gyro.y -= -3.08658361;
-	device->gyro.z -= 0.494207352;
+	device->gyro.x -= -3.13812327; //Calibration
+	device->gyro.y -= 0.0449692011;
+	device->gyro.z -= 0.46484378;
 
 	//device->gyro.x *= DEG_TO_RAD;
 	//device->gyro.y *= DEG_TO_RAD;
@@ -270,6 +270,35 @@ void ICM42688_Process_Buffer(ICM42688 *device){
 
 }
 
+HAL_StatusTypeDef ICM42688_Calibrate_Gyro(ICM42688 *device){
+	Vec3 calibration = {0.0f, 0.0f, 0.0f};
+
+	uint8_t data[6];
+
+	for (int i = 0; i < 1000; i++) {
+		HAL_StatusTypeDef status = ICM42688_Read_Multiple(device, GYRO_DATA_X1, data, 6);
+		if(status != HAL_OK) return status;
+
+		int16_t gyro[3];
+
+		gyro[0] = (int16_t)((data[0] << 8) | data[1]);
+		gyro[1] = (int16_t)((data[2] << 8) | data[3]);
+		gyro[2] = (int16_t)((data[4] << 8) | data[5]);
+
+		calibration.x += (float) gyro[1] / 32.8f; //GYRO_FS_SEL_1000_DPS
+		calibration.y += -(float) gyro[0] / 32.8f; //Axis Remapping
+		calibration.z += (float) gyro[2] / 32.8f;
+	}
+
+	calibration.x /= 1000;
+	calibration.y /= 1000;
+	calibration.z /= 1000;
+
+	__NOP();
+
+	return HAL_OK;
+
+}
 
 HAL_StatusTypeDef ICM42688_Change_Bank(ICM42688 *device, BANK_SEL reg){
 
