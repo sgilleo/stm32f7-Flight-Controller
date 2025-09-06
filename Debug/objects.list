@@ -7,6 +7,7 @@
 "./Core/Src/Parameters.o"
 "./Core/Src/Quaternion.o"
 "./Core/Src/Sbus.o"
+"./Core/Src/USB.o"
 "./Core/Src/main.o"
 "./Core/Src/stm32f7xx_hal_msp.o"
 "./Core/Src/stm32f7xx_it.o"

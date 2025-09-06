@@ -1,3 +1,3 @@
-../Core/Src/Parameters.c:94:9:flash_empty	24	static
-../Core/Src/Parameters.c:104:19:Load_Parameters	24	static
-../Core/Src/Parameters.c:117:19:Save_Parameters	64	static
+../Core/Src/Parameters.c:96:9:flash_empty	24	static
+../Core/Src/Parameters.c:107:19:Load_Parameters	24	static
+../Core/Src/Parameters.c:120:19:Save_Parameters	64	static

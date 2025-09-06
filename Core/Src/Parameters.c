@@ -91,6 +91,8 @@ const ParameterTable default_parameters = {
 
 ParameterTable parameters;
 
+
+
 uint8_t flash_empty(uint32_t addr, size_t size) {
 	uint32_t *p = (uint32_t*)addr;
 	for (size_t i = 0; i < size/4; i++) {
@@ -144,5 +146,8 @@ HAL_StatusTypeDef Save_Parameters(ParameterTable *parameters){
 
 	return status;
 }
+
+
+
 
 

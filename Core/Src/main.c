@@ -34,6 +34,7 @@
 #include "PIDs.h"
 #include "Battery.h"
 #include "Parameters.h"
+#include "USB.h"
 
 /* USER CODE END Includes */
 
@@ -114,6 +115,7 @@ extern Flight_Mode flight_mode;
 uint32_t timer = 0;
 extern Arming arming;
 extern ParameterTable parameters, default_parameters;
+extern uint8_t usbRxBuffer[20];
 
 void HAL_UARTEx_RxEventCallback(UART_HandleTypeDef *huart, uint16_t Size){
 	if(huart->Instance == huart4.Instance){
@@ -246,9 +248,6 @@ int main(void)
 		if(imu.dataRdy){
 
 			AHRS_Update_Complementary_Filter(imu.gyro, imu.accel, 0.8, DELTA_T);
-
-			sprintf(usbBuffer, "%f, %f\r\n", attitude.x, attitude.y);
-			CDC_Transmit_FS((uint8_t *) usbBuffer, strlen(usbBuffer));
 
 		}
 

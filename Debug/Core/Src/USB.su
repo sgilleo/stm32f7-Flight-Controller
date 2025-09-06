@@ -1,0 +1,5 @@
+../Core/Src/USB.c:14:18:atoFunction	16	static
+../Core/Src/USB.c:25:6:Set_Param_By_Name	16	static
+../Core/Src/USB.c:106:7:Get_Param_By_Name	16	static
+../Core/Src/USB.c:188:6:Process_Command	48	static
+../Core/Src/USB.c:224:6:USB_RXCallback	16	static

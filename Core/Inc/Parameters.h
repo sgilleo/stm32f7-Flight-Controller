@@ -107,4 +107,6 @@ HAL_StatusTypeDef Load_Parameters(ParameterTable *parameters);
 
 HAL_StatusTypeDef Save_Parameters(ParameterTable *parameters);
 
+
+
 #endif /* INC_PARAMETERS_H_ */
