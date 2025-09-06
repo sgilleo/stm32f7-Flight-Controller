@@ -45,10 +45,11 @@ Core/Src/main.o: ../Core/Src/main.c ../Core/Inc/main.h \
  ../Middlewares/ST/STM32_USB_Device_Library/Core/Inc/usbd_core.h \
  ../Middlewares/ST/STM32_USB_Device_Library/Core/Inc/usbd_ioreq.h \
  ../Middlewares/ST/STM32_USB_Device_Library/Core/Inc/usbd_ctlreq.h \
- ../Core/Inc/ICM42688P.h ../Core/Inc/Outputs.h ../Core/Inc/Flight_Modes.h \
- ../Core/Inc/Sbus.h ../Core/Inc/ICM42688P.h ../Core/Inc/Outputs.h \
- ../Core/Inc/PIDs.h ../Core/Inc/Sbus.h ../Core/Inc/Flight_Modes.h \
- ../Core/Inc/AHRS.h ../Core/Inc/PIDs.h ../Core/Inc/Battery.h
+ ../Core/Inc/ICM42688P.h ../Core/Inc/Outputs.h ../Core/Inc/Parameters.h \
+ ../Core/Inc/Outputs.h ../Core/Inc/Flight_Modes.h ../Core/Inc/Sbus.h \
+ ../Core/Inc/ICM42688P.h ../Core/Inc/PIDs.h ../Core/Inc/Sbus.h \
+ ../Core/Inc/Flight_Modes.h ../Core/Inc/AHRS.h ../Core/Inc/PIDs.h \
+ ../Core/Inc/Battery.h ../Core/Inc/Parameters.h
 ../Core/Inc/main.h:
 ../Drivers/STM32F7xx_HAL_Driver/Inc/stm32f7xx_hal.h:
 ../Core/Inc/stm32f7xx_hal_conf.h:
@@ -99,13 +100,15 @@ Core/Src/main.o: ../Core/Src/main.c ../Core/Inc/main.h \
 ../Middlewares/ST/STM32_USB_Device_Library/Core/Inc/usbd_ctlreq.h:
 ../Core/Inc/ICM42688P.h:
 ../Core/Inc/Outputs.h:
+../Core/Inc/Parameters.h:
+../Core/Inc/Outputs.h:
 ../Core/Inc/Flight_Modes.h:
 ../Core/Inc/Sbus.h:
 ../Core/Inc/ICM42688P.h:
-../Core/Inc/Outputs.h:
 ../Core/Inc/PIDs.h:
 ../Core/Inc/Sbus.h:
 ../Core/Inc/Flight_Modes.h:
 ../Core/Inc/AHRS.h:
 ../Core/Inc/PIDs.h:
 ../Core/Inc/Battery.h:
+../Core/Inc/Parameters.h:

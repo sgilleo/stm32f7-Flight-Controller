@@ -33,7 +33,7 @@
 #include "AHRS.h"
 #include "PIDs.h"
 #include "Battery.h"
-
+#include "Parameters.h"
 
 /* USER CODE END Includes */
 
@@ -113,7 +113,7 @@ extern Flight_Mode flight_mode;
 
 uint32_t timer = 0;
 extern Arming arming;
-
+extern ParameterTable parameters, default_parameters;
 
 void HAL_UARTEx_RxEventCallback(UART_HandleTypeDef *huart, uint16_t Size){
 	if(huart->Instance == huart4.Instance){
@@ -219,6 +219,15 @@ int main(void)
   if(Output_Begin(&htim2, &htim3) != HAL_OK) {
 	  Error_Handler();
   }
+
+  //Load Parameters from FLASH
+  if(Load_Parameters(&parameters) != HAL_OK){
+	  Save_Parameters(&default_parameters);
+	  if(Load_Parameters(&parameters) != HAL_OK){
+		  Error_Handler();
+	  }
+  }
+
 
 
 

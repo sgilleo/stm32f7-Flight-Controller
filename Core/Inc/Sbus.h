@@ -10,13 +10,6 @@
 
 #include "stm32f7xx_hal.h"
 
-#define THROTTLE_CHANNEL 1-1
-#define ROLL_CHANNEL 2-1
-#define PITCH_CHANNEL 3-1
-#define YAW_CHANNEL 4-1
-#define ARMING_CHANNEL 5-1
-#define FLIGHT_MODE_CHANNEL 6-1
-
 typedef enum{
 	SBUS_SIGNAL_OK = 0x00,
 	SBUS_SIGNAL_LOST = 0x01,

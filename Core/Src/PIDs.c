@@ -11,6 +11,7 @@
 extern float functions[10];
 
 Vec3 ref_prev, filtered_error, filtered_error_prev, integral = {0.0f, 0.0f, 0.0f};
+extern ParameterTable parameters;
 
 void PID_Stabilized_Update(Vec3 ref, Vec3 attitude, float dt){
 
@@ -29,8 +30,8 @@ void PID_Stabilized_Update(Vec3 ref, Vec3 attitude, float dt){
 	integral.z += error.z * dt;
 
 
-	functions[AILERONS] = ROLL_KP_STABILIZED*error.x + ROLL_KD_STABILIZED*(filtered_error.x-filtered_error_prev.x)/dt + ROLL_KI_STABILIZED*integral.x;
-	functions[ELEVATOR] = PITCH_KP_STABILIZED*error.y + PITCH_KD_STABILIZED*(filtered_error.y-filtered_error_prev.y)/dt + PITCH_KI_STABILIZED*integral.y;
+	functions[AILERONS] = parameters.ROLL_KP_STABILIZED*error.x + parameters.ROLL_KD_STABILIZED*(filtered_error.x-filtered_error_prev.x)/dt + parameters.ROLL_KI_STABILIZED*integral.x;
+	functions[ELEVATOR] = parameters.PITCH_KP_STABILIZED*error.y + parameters.PITCH_KD_STABILIZED*(filtered_error.y-filtered_error_prev.y)/dt + parameters.PITCH_KI_STABILIZED*integral.y;
 
 	functions[AILERONS] /= M_PI_2;
 	functions[ELEVATOR] /= M_PI_2;
@@ -55,9 +56,9 @@ void PID_Acro_Update(Vec3 ref, Vec3 rates, float dt){
 	integral.z += error.z * dt;
 
 
-	functions[AILERONS] = ROLL_KP_ACRO*error.x + ROLL_KD_ACRO*(filtered_error.x-filtered_error_prev.x)/dt + ROLL_KI_ACRO*integral.x;
-	functions[ELEVATOR] = PITCH_KP_ACRO*error.y + PITCH_KD_ACRO*(filtered_error.y-filtered_error_prev.y)/dt + PITCH_KI_ACRO*integral.y;
-	functions[RUDDER] = YAW_KP_ACRO*error.z + YAW_KD_ACRO*(filtered_error.z-filtered_error_prev.z)/dt;
+	functions[AILERONS] = parameters.ROLL_KP_ACRO*error.x + parameters.ROLL_KD_ACRO*(filtered_error.x-filtered_error_prev.x)/dt + parameters.ROLL_KI_ACRO*integral.x;
+	functions[ELEVATOR] = parameters.PITCH_KP_ACRO*error.y + parameters.PITCH_KD_ACRO*(filtered_error.y-filtered_error_prev.y)/dt + parameters.PITCH_KI_ACRO*integral.y;
+	functions[RUDDER] = parameters.YAW_KP_ACRO*error.z + parameters.YAW_KD_ACRO*(filtered_error.z-filtered_error_prev.z)/dt;
 
 	functions[AILERONS] /= M_PI_2;
 	functions[ELEVATOR] /= M_PI_2;

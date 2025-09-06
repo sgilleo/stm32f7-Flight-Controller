@@ -13,13 +13,14 @@
 #include "ICM42688P.h"
 #include "Outputs.h"
 #include "PIDs.h"
+#include "Parameters.h"
 
-#define STABILIZED_MAX_ROLL 45 //Degrees
+/*#define STABILIZED_MAX_ROLL 45 //Degrees
 #define STABILIZED_MAX_PITCH 45
 
 #define ACRO_ROLL_RATE 180 //Full Stick Left/Right: Degrees / Second
 #define ACRO_PITCH_RATE 180
-#define ACRO_YAW_RATE 180
+#define ACRO_YAW_RATE 90*/
 
 typedef enum{
 	MANUAL_MODE,

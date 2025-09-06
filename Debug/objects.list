@@ -4,6 +4,7 @@
 "./Core/Src/ICM42688P.o"
 "./Core/Src/Outputs.o"
 "./Core/Src/PIDs.o"
+"./Core/Src/Parameters.o"
 "./Core/Src/Quaternion.o"
 "./Core/Src/Sbus.o"
 "./Core/Src/main.o"
